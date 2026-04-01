@@ -2,7 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-# ---------------- LOAD ---------------- #
+# ---------------- LOAD FILES ---------------- #
 model = pickle.load(open("model.pkl", "rb"))
 scalerr = pickle.load(open("scaler.pkl", "rb"))
 encoders = pickle.load(open("encoders.pkl", "rb"))
@@ -15,6 +15,9 @@ st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🎓 Student Exam S
 st.markdown("<p style='text-align: center;'>Predict student performance using Machine Learning</p>", unsafe_allow_html=True)
 
 st.markdown("---")
+
+# ---------------- INFO NOTE ---------------- #
+st.info("📌 Note: Model predictions are based on dataset where scores typically range between 40–75.")
 
 # ---------------- INPUT SECTION ---------------- #
 st.subheader("📋 Enter Student Details")
@@ -34,10 +37,10 @@ with col2:
 
 st.markdown("---")
 
-# ---------------- PREDICT BUTTON ---------------- #
+# ---------------- PREDICT ---------------- #
 if st.button("🚀 Predict Score"):
 
-    # minimal inputs + auto-fill remaining
+    # -------- INPUT DATA -------- #
     data = {
         "Hours_Studied": Hours_Studied,
         "Attendance": Attendance,
@@ -47,7 +50,7 @@ if st.button("🚀 Predict Score"):
         "Internet_Access": Internet_Access,
         "Parental_Involvement": Parental_Involvement,
 
-        # auto-filled values
+        # -------- AUTO-FILL -------- #
         "Access_to_Resources": "Medium",
         "Extracurricular_Activities": "Yes",
         "Tutoring_Sessions": 2,
@@ -74,23 +77,36 @@ if st.button("🚀 Predict Score"):
     df = df[model.feature_names_in_]
     df = scalerr.transform(df)
 
-    # -------- PREDICT -------- #
-    prediction = model.predict(df)
+    # -------- PREDICTION -------- #
+    prediction = model.predict(df)[0]
 
-    st.markdown("---")
+    # -------- PERFORMANCE CATEGORY -------- #
+    if prediction < 50:
+        performance = "⚠️ Average"
+        st.warning(performance)
+    elif prediction < 65:
+        performance = "👍 Good"
+        st.info(performance)
+    else:
+        performance = "🔥 Excellent"
+        st.success(performance)
 
-    st.success(f"🎯 Predicted Exam Score: **{round(prediction[0], 2)}**")
+    # -------- DISPLAY SCORE -------- #
+    st.markdown(f"### 🎯 Predicted Exam Score: **{round(prediction, 2)}**")
 
-    # Progress bar (visual effect 🔥)
-    st.progress(min(int(prediction[0]), 100))
+    # -------- PROGRESS BAR -------- #
+    st.progress(min(int(prediction), 100))
+
+    # -------- FUN EFFECT -------- #
+    if prediction > 65:
+        st.balloons()
 
 # ---------------- SIDEBAR ---------------- #
 st.sidebar.title("ℹ️ About")
 st.sidebar.info(
-    """
-    This app predicts student exam scores using a Machine Learning model.
+"""
+This app predicts student exam scores using Machine Learning.
 
-    """
 )
 
 st.sidebar.markdown("👨‍💻 Developed by Leela Krishna")
