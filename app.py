@@ -17,7 +17,7 @@ st.markdown("<p style='text-align: center;'>Predict student performance using Ma
 st.markdown("---")
 
 # ---------------- INFO NOTE ---------------- #
-st.info("📌 Note: Model predictions are based on dataset where scores typically range between 40–75.")
+st.info("📌 Note: Model predictions are based on dataset where scores are typically below 75.")
 
 # ---------------- INPUT SECTION ---------------- #
 st.subheader("📋 Enter Student Details")
