@@ -106,7 +106,7 @@ st.sidebar.title("ℹ️ About")
 st.sidebar.info(
 """
 This app predicts student exam scores using Machine Learning.
-
+"""
 )
 
 st.sidebar.markdown("👨‍💻 Developed by Leela Krishna")
