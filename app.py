@@ -18,7 +18,7 @@ st.markdown("---")
 
 # ---------------- INFO NOTE ---------------- #
 
-
+st.info("This model predicts the score typically below 75%")
 # ---------------- INPUT SECTION ---------------- #
 st.subheader("📋 Enter Student Details")
 
